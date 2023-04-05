@@ -1,7 +1,7 @@
 # CHANGELOG.md
 
-## 1.0.0 (2023-03-27)
+## 1.0.1 (2023-04-05)
 
 Features:
 
-  - add video call
+  - video call dari dokter ke pasien
