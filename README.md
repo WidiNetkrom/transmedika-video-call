@@ -1,92 +1,140 @@
-# Flutter WebRTC Kurento One To One Call
+# transmedika_one_to_one_call
 
+Transmedika SDK Video Call
 
+## Supported Platforms
 
-## Getting started
+- Android
+- IOS
+- Web
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Functionality
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+| Feature | Android |  iOS  | Web |
+| :-------------: | :-------------:|:-----:| :-----: |
+| Audio/Video | :heavy_check_mark: | [WIP] | :heavy_check_mark: |
 
-## Add your files
+## Contoh
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Saya menggunakan contoh pada main.dart
 
+```dart
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:transmedika_one_to_one_call/webrtc/profile.dart';
+import 'one_to_one_page.dart';
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}
+
+void main() {
+  HttpOverrides.global = MyHttpOverrides();
+  runApp(const MyApp());
+}
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/jhonny.wick.jw/flutter-webrtc-kurento-one-to-one-call.git
-git branch -M main
-git push -uf origin main
+
+
+## Menerima Panggilan
+
+Untuk menerima panggilan mekanisme aplikasinya kamu akan menerima notifikasi dari firebase. 
+Data myself, other, consultationId bisa kamu dapatkan dari data yang dikirim lewat notifikasi tersebut dan 
+kamu cukup panggil dan masukan data tersebut ke kontruktor class OneToOneScreen. 
+Lihat contoh di bawah ini.
+
+```dart
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+
+    Profile mySelf = Profile(
+        email: "maman@rskp.com",
+        name: 'TN, MAMAN',
+        uuid: '7bfb1588-fc6a-4878-a96f-126cd6a6692c',
+        profilePicture: null,
+        token: 'xxxxxxxxxxxx'
+    );
+
+    Profile other = Profile(
+        email: "dion@rskp.com",
+        name: 'dr. Dionisius Panji Wijanarko, Sp.B',
+        uuid: '42c6145f-8143-4d67-ad30-6f84571e0f65',
+        profilePicture: null
+    );
+
+    String consultationId = '224';
+
+    return MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: OneToOneScreen(
+            mySelf: mySelf,
+            other: other,
+            consultationId: consultationId
+        )
+    );
+  }
+}
 ```
 
-## Integrate with your tools
+## Menelepon
 
-- [ ] [Set up project integrations](https://gitlab.com/jhonny.wick.jw/flutter-webrtc-kurento-one-to-one-call/-/settings/integrations)
+Untuk bisa melakukan panggilan kamu harus request GET ke endpoint ini auth/check-device-id-multiple untuk mendapatkan data firebase token dari device.
+Firebase token hanya digunakan jika kamu ingin menelepon saja, jadi optional untuk isi data konstruktornya.
+Lihat contoh di bawah ini.
 
-## Collaborate with your team
+```dart
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+    Profile mySelf = Profile(
+        email: "maman@rskp.com",
+        name: 'TN, MAMAN',
+        uuid: '7bfb1588-fc6a-4878-a96f-126cd6a6692c',
+        profilePicture: null,
+        token: 'xxxxxxxxxxxx'
+    );
 
-## Test and Deploy
+    Profile other = Profile(
+        email: "dion@rskp.com",
+        name: 'dr. Dionisius Panji Wijanarko, Sp.B',
+        uuid: '42c6145f-8143-4d67-ad30-6f84571e0f65',
+        profilePicture: null
+    );
 
-Use the built-in continuous integration in GitLab.
+    String consultationId = '224';
+    
+    List<String> fcmTokens = ['fYSu5ILSvcKFUwyPRo--kl:APA91bF7c3EVBX7jvGvhQZrFC-Y2t83sjZ79gljq03WE9finRILE608KHAZkrX0MRIjAZL2Fi2Cvy1orZY8C9sgNfTH_eHWJl0X7quGSyusbTDaCnwVtGuwT22H3PbQwhaPmAXgqX6Oq'];
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+    return MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: OneToOneScreen(
+            mySelf: mySelf,
+            other: other,
+            consultationId: consultationId,
+            fcmTokens: fcmTokens
+        )
+    );
+  }
+}
+```
 
-***
+## Preview Images
+<img src="https://raw.githubusercontent.com/WidiNetkrom/transmedika-video-call/main/screenshoots/Screenshot_20230405-143410.png" width="320px" />
+<img src="https://raw.githubusercontent.com/WidiNetkrom/transmedika-video-call/main/screenshoots/Screenshot_20230405-143434.png" width="320px" />
+<img src="https://raw.githubusercontent.com/WidiNetkrom/transmedika-video-call/main/screenshoots/web.PNG" />
 
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## Conclusion
+have a nice day 🙂

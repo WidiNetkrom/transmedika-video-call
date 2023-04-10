@@ -1,7 +1,9 @@
 # CHANGELOG.md
 
-## 1.0.1 (2023-04-05)
+## 1.0.30
 
 Features:
 
-  - video call dari dokter ke pasien
+- support untuk web
+- swap stream di mobile
+- screen sharing di web
