@@ -1,9 +1,7 @@
 # CHANGELOG.md
 
-## 1.0.30
+## 1.0.32
 
 Features:
 
-- support untuk web
-- swap stream di mobile
-- screen sharing di web
+- support Flutter 2.10.5 / Dart 2.16.2

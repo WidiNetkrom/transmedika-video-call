@@ -52,20 +52,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Profile mySelf = Profile(
-        email: "maman@rskp.com",
-        name: 'TN, MAMAN',
-        uuid: '7bfb1588-fc6a-4878-a96f-126cd6a6692c',
-        profilePicture: null,
-        token: 'xxxxxxxxxxxx'
-    );
+    final mySelf = {
+      'email': "maman@rskp.com",
+      'name': 'TN, MAMAN',
+      'uuid': '7bfb1588-fc6a-4878-a96f-126cd6a6692c',
+      'profilePicture': 'https://upload.wikimedia.org/wikipedia/commons/0/04/Elon_Musk_and_Hans_Koenigsmann_at_the_SpaceX_CRS-8_post-launch_press_conference_%2826223624532%29_%28cropped%29.jpg',
+      'token': 'xxxxxxxxxxxx'
+    };
 
-    Profile other = Profile(
-        email: "dion@rskp.com",
-        name: 'dr. Dionisius Panji Wijanarko, Sp.B',
-        uuid: '42c6145f-8143-4d67-ad30-6f84571e0f65',
-        profilePicture: null
-    );
+    final other = {
+      'email': "dion@rskp.com",
+      'name': 'dr. Dionisius Panji Wijanarko, Sp.B',
+      'uuid': '42c6145f-8143-4d67-ad30-6f84571e0f65',
+      'profilePicture': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Donald_Trump_official_portrait.jpg/710px-Donald_Trump_official_portrait.jpg',
+    };
 
     String consultationId = '224';
 
@@ -75,16 +75,19 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: OneToOneScreen(
-            mySelf: mySelf,
-            other: other,
-            consultationId: consultationId
+          mySelf: mySelf,
+          other: other,
+          consultationId: consultationId,
+          onMessage: (message){
+            ///put your toast or widget for display message
+          },
         )
     );
   }
 }
 ```
 
-## Menelepon
+## Memanggil
 
 Untuk bisa melakukan panggilan kamu harus request GET ke endpoint ini auth/check-device-id-multiple untuk mendapatkan data firebase token dari device.
 Firebase token hanya digunakan jika kamu ingin menelepon saja, jadi optional untuk isi data konstruktornya.
@@ -96,20 +99,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Profile mySelf = Profile(
-        email: "maman@rskp.com",
-        name: 'TN, MAMAN',
-        uuid: '7bfb1588-fc6a-4878-a96f-126cd6a6692c',
-        profilePicture: null,
-        token: 'xxxxxxxxxxxx'
-    );
+    final mySelf = {
+      'email': "maman@rskp.com",
+      'name': 'TN, MAMAN',
+      'uuid': '7bfb1588-fc6a-4878-a96f-126cd6a6692c',
+      'profilePicture': 'https://upload.wikimedia.org/wikipedia/commons/0/04/Elon_Musk_and_Hans_Koenigsmann_at_the_SpaceX_CRS-8_post-launch_press_conference_%2826223624532%29_%28cropped%29.jpg',
+      'token': 'xxxxxxxxxxxx'
+    };
 
-    Profile other = Profile(
-        email: "dion@rskp.com",
-        name: 'dr. Dionisius Panji Wijanarko, Sp.B',
-        uuid: '42c6145f-8143-4d67-ad30-6f84571e0f65',
-        profilePicture: null
-    );
+    final other = {
+      'email': "dion@rskp.com",
+      'name': 'dr. Dionisius Panji Wijanarko, Sp.B',
+      'uuid': '42c6145f-8143-4d67-ad30-6f84571e0f65',
+      'profilePicture': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Donald_Trump_official_portrait.jpg/710px-Donald_Trump_official_portrait.jpg',
+    };
 
     String consultationId = '224';
     
@@ -121,10 +124,13 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: OneToOneScreen(
-            mySelf: mySelf,
-            other: other,
-            consultationId: consultationId,
-            fcmTokens: fcmTokens
+          mySelf: mySelf,
+          other: other,
+          consultationId: consultationId,
+          fcmTokens: fcmTokens,
+          onMessage: (message){
+            ///put your toast or widget for display message
+          },
         )
     );
   }
@@ -134,7 +140,7 @@ class MyApp extends StatelessWidget {
 ## Preview Images
 <img src="https://raw.githubusercontent.com/WidiNetkrom/transmedika-video-call/main/screenshoots/Screenshot_20230405-143410.png" width="320px" />
 <img src="https://raw.githubusercontent.com/WidiNetkrom/transmedika-video-call/main/screenshoots/Screenshot_20230405-143434.png" width="320px" />
-<img src="https://raw.githubusercontent.com/WidiNetkrom/transmedika-video-call/main/screenshoots/web.PNG" />
+<img src="https://raw.githubusercontent.com/WidiNetkrom/transmedika-video-call/main/screenshoots/web.PNG" width="480px"/>
 
 ## Conclusion
 have a nice day 🙂
